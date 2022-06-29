@@ -1,0 +1,7 @@
+{
+  user(id: "85c08e06-110c-441c-97a9-56afb329ebaa") {
+    id
+    name
+    email
+  }
+}
