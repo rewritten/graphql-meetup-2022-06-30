@@ -10,7 +10,7 @@ defmodule GraphqlMeetup.Macros do
       result = unquote(yield)
 
       time = System.monotonic_time() - start
-      IO.puts("<--- #{m}.#{f}/#{a} - #{inspect(self())} -- #{time} µs")
+      IO.puts("<--- #{m}.#{f}/#{a} - #{inspect(self())} -- #{time / 1000.0} µs")
 
       result
     end

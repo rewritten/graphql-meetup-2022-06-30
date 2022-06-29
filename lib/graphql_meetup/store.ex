@@ -346,6 +346,13 @@ defmodule GraphqlMeetup.Store do
          ]
          |> Enum.shuffle()
 
-  def users, do: @users
-  def posts, do: @posts
+  def users do
+    Process.sleep(100)
+    @users
+  end
+
+  def posts do
+    Process.sleep(100)
+    @posts
+  end
 end
