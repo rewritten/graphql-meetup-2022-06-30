@@ -52,4 +52,18 @@ defmodule GraphqlMeetup.SchemaTest do
              }
            } = result
   end
+
+  test "query with two users and a list of posts with author" do
+    query = "../parallel_posts_and_two_users.graphql" |> Path.expand(__ENV__.file) |> File.read!()
+
+    result = Absinthe.run!(query, Schema)
+
+    assert %{
+             data: %{
+               "posts" => [%{"author" => %{"name" => _}, "title" => _} | _],
+               "user" => %{"name" => _},
+               "anotherUser" => %{"name" => _}
+             }
+           } = result
+  end
 end

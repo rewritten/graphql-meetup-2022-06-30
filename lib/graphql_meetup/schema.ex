@@ -11,9 +11,7 @@ defmodule GraphqlMeetup.Schema do
     field :user, :user do
       arg :id, non_null(:id)
 
-      resolve fn _, %{id: id}, _ ->
-        batch({Resolvers.Users, :by_id}, id, fn map -> {:ok, Map.get(map, id)} end)
-      end
+      resolve &Resolvers.Users.find/3
     end
   end
 
@@ -23,9 +21,7 @@ defmodule GraphqlMeetup.Schema do
     field :body, :string
 
     field :author, :user do
-      resolve fn %{author: id}, _, _ ->
-        batch({Resolvers.Users, :by_id}, id, fn map -> {:ok, Map.get(map, id)} end)
-      end
+      resolve &Resolvers.Users.find/3
     end
   end
 
@@ -35,9 +31,7 @@ defmodule GraphqlMeetup.Schema do
     field :email, :string
 
     field :posts, list_of(:post) do
-      resolve fn %{id: id}, _, _ ->
-        batch({Resolvers.Posts, :by_author}, id, fn map -> {:ok, Map.get(map, id)} end)
-      end
+      resolve &Resolvers.Posts.list/3
     end
   end
 end

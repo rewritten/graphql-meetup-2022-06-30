@@ -4,19 +4,14 @@ defmodule GraphqlMeetup.Resolvers.Users do
   require GraphqlMeetup.Macros
 
   import GraphqlMeetup.Macros
+  import Absinthe.Resolution.Helpers
 
   def find(%{author: id}, _args, _ctx) do
-    trace do
-      user = Store.users() |> Enum.find(&(&1.id == id))
-      {:ok, user}
-    end
+    batch({__MODULE__, :by_id}, id, &{:ok, Map.get(&1, id)})
   end
 
   def find(_parent, %{id: id}, _ctx) do
-    trace do
-      user = Store.users() |> Enum.find(&(&1.id == id))
-      {:ok, user}
-    end
+    batch({__MODULE__, :by_id}, id, &{:ok, Map.get(&1, id)})
   end
 
   def by_id(_, ids) do
