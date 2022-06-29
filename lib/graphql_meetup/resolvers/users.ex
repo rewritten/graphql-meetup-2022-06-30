@@ -18,4 +18,12 @@ defmodule GraphqlMeetup.Resolvers.Users do
       {:ok, user}
     end
   end
+
+  def by_id(_, ids) do
+    trace do
+      Store.users()
+      |> Enum.filter(&(&1.id in ids))
+      |> Map.new(&{&1.id, &1})
+    end
+  end
 end

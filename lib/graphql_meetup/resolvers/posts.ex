@@ -16,4 +16,12 @@ defmodule GraphqlMeetup.Resolvers.Posts do
       {:ok, Store.posts()}
     end
   end
+
+  def by_author(_, ids) do
+    trace do
+      Store.posts()
+      |> Enum.filter(&(&1.author in ids))
+      |> Enum.group_by(& &1.author)
+    end
+  end
 end
