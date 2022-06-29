@@ -1,0 +1,12 @@
+{
+  posts {
+    id
+    title
+    body
+    author {
+      id
+      name
+      email
+    }
+  }
+}
