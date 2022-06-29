@@ -10,7 +10,8 @@ defmodule GraphqlMeetup.Schema do
 
     field :user, :user do
       arg :id, non_null(:id)
-      resolve &Resolvers.Users.find/3
+
+      resolve &async(fn -> Resolvers.Users.find(&1, &2, &3) end)
     end
   end
 
@@ -20,7 +21,7 @@ defmodule GraphqlMeetup.Schema do
     field :body, :string
 
     field :author, :user do
-      resolve &Resolvers.Users.find/3
+      resolve &async(fn -> Resolvers.Users.find(&1, &2, &3) end)
     end
   end
 
