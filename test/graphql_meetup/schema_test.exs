@@ -26,4 +26,30 @@ defmodule GraphqlMeetup.SchemaTest do
 
     assert %{data: %{"user" => %{"email" => _}}} = result
   end
+
+  test "it resolves the other author's posts" do
+    query = "../posts_with_nested_posts.graphql" |> Path.expand(__ENV__.file) |> File.read!()
+
+    result = Absinthe.run!(query, Schema)
+
+    assert %{
+             data: %{
+               "posts" => [
+                 %{
+                   "author" => %{
+                     "email" => _,
+                     "posts" => [
+                       %{"title" => _},
+                       %{"title" => _},
+                       %{"title" => _},
+                       %{"title" => _}
+                     ]
+                   },
+                   "title" => _
+                 }
+                 | _
+               ]
+             }
+           } = result
+  end
 end

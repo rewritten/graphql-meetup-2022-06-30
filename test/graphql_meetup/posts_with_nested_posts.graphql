@@ -1,0 +1,11 @@
+{
+  posts {
+    title
+    author {
+      email
+      posts {
+        title
+      }
+    }
+  }
+}

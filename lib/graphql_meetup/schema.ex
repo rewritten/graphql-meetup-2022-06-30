@@ -30,6 +30,8 @@ defmodule GraphqlMeetup.Schema do
     field :name, :string
     field :email, :string
 
-    field :posts, list_of(:post)
+    field :posts, list_of(:post) do
+      resolve &async(fn -> Resolvers.Posts.list(&1, &2, &3) end)
+    end
   end
 end
