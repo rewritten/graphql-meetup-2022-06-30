@@ -6,12 +6,12 @@ defmodule GraphqlMeetup.Resolvers.Users do
   import GraphqlMeetup.Macros
   import Absinthe.Resolution.Helpers
 
-  def find(%{author: id}, _args, _ctx) do
-    batch({__MODULE__, :by_id}, id, &{:ok, Map.get(&1, id)})
+  def name(%{id: id}, _args, _ctx) do
+    batch({__MODULE__, :by_id}, id, &{:ok, Map.get(&1, id).name})
   end
 
-  def find(_parent, %{id: id}, _ctx) do
-    batch({__MODULE__, :by_id}, id, &{:ok, Map.get(&1, id)})
+  def email(%{id: id}, _args, _ctx) do
+    batch({__MODULE__, :by_id}, id, &{:ok, Map.get(&1, id).email})
   end
 
   def by_id(_, ids) do

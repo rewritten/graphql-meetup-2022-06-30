@@ -1,5 +1,5 @@
 {
-  posts {
+  posts(limit: 100) {
     id
     title
     body

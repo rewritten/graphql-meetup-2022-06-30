@@ -33,8 +33,8 @@ defmodule GraphqlMeetup.Schema do
 
   object :user do
     field :id, :id
-    field :name, :string
-    field :email, :string
+    field :name, :string, resolve: &Resolvers.Users.name/3
+    field :email, :string, resolve: &Resolvers.Users.email/3
 
     field :posts, list_of(:post) do
       resolve &Resolvers.Posts.list/3
