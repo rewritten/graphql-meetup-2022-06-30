@@ -3,6 +3,8 @@ defmodule GraphqlMeetup.Schema do
 
   alias GraphqlMeetup.Resolvers
 
+  import Absinthe.Resolution.Helpers
+
   query do
     field :posts, list_of(:post) do
       arg :limit, :integer, default_value: 10
@@ -33,8 +35,8 @@ defmodule GraphqlMeetup.Schema do
 
   object :user do
     field :id, :id
-    field :name, :string, resolve: &Resolvers.Users.name/3
-    field :email, :string, resolve: &Resolvers.Users.email/3
+    field :name, :string, resolve: dataloader(:users)
+    field :email, :string, resolve: dataloader(:users)
 
     field :posts, list_of(:post) do
       resolve &Resolvers.Posts.list/3
@@ -47,5 +49,19 @@ defmodule GraphqlMeetup.Schema do
 
     field :post, :post
     field :author, :user
+  end
+
+  def context(ctx) do
+    loader =
+      Dataloader.new()
+      |> Dataloader.add_source(:users, %GraphqlMeetup.Resolvers.Source{
+        load_fun: &GraphqlMeetup.Store.users/0
+      })
+
+    Map.put(ctx, :loader, loader)
+  end
+
+  def plugins do
+    [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
   end
 end
