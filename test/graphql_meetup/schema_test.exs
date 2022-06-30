@@ -24,7 +24,7 @@ defmodule GraphqlMeetup.SchemaTest do
 
     result = Absinthe.run!(query, Schema)
 
-    assert %{data: %{"user" => %{"email" => _}}} = result
+    assert %{data: %{"user" => %{"email" => "" <> _}}} = result
   end
 
   test "it resolves the other author's posts" do

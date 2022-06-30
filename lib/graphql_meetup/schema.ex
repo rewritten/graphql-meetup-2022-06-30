@@ -13,7 +13,7 @@ defmodule GraphqlMeetup.Schema do
     field :user, :user do
       arg :id, non_null(:id)
 
-      resolve &Resolvers.Users.find/3
+      resolve fn _, %{id: id}, _ -> {:ok, %{id: id}} end
     end
   end
 
@@ -23,7 +23,7 @@ defmodule GraphqlMeetup.Schema do
     field :body, :string
 
     field :author, :user do
-      resolve &Resolvers.Users.find/3
+      resolve fn %{author: id}, _, _ -> {:ok, %{id: id}} end
     end
 
     field :comments, list_of(:comment) do
