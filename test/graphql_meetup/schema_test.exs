@@ -103,4 +103,21 @@ defmodule GraphqlMeetup.SchemaTest do
              }
            } = result
   end
+
+  test "resolves user not needed" do
+    query = "../user_not_needed.graphql" |> Path.expand(__ENV__.file) |> File.read!()
+
+    result = Absinthe.run!(query, Schema)
+
+    assert %{
+             data: %{
+               "user" => %{
+                 "posts" => [
+                   %{"author" => %{"id" => _}}
+                   | _
+                 ]
+               }
+             }
+           } = result
+  end
 end
