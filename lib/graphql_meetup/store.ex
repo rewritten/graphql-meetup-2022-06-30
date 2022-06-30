@@ -355,4 +355,10 @@ defmodule GraphqlMeetup.Store do
     Process.sleep(100)
     @posts
   end
+
+  # Adding comments, but no data is needed.
+  def comments do
+    Process.sleep(100)
+    []
+  end
 end

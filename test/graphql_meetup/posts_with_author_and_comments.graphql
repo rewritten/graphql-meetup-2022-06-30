@@ -1,0 +1,11 @@
+{
+  posts(limit: 2) {
+    title
+    author {
+      email
+    }
+    comments {
+      body
+    }
+  }
+}

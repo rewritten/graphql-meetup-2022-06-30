@@ -7,17 +7,21 @@ defmodule GraphqlMeetup.Resolvers.Posts do
   import Absinthe.Resolution.Helpers
 
   def list(%{id: id}, _args, _ctx) do
-    batch({__MODULE__, :by_author_batch_fun}, id, &{:ok, Map.get(&1, id)})
+    batch({__MODULE__, :by_author_batch_fun}, id, &{:ok, Map.get(&1, id, [])})
   end
 
-  def list(_parent, _args, _ctx) do
-    batch({__MODULE__, :all_batch_fun}, nil, &{:ok, &1})
+  def list(_parent, args, _ctx) do
+    batch({__MODULE__, :all_batch_fun}, args, &{:ok, Map.get(&1, args)})
   end
 
   # phony args for batching
-  def all_batch_fun(_, _) do
+  def all_batch_fun(_, list_of_args) do
     trace do
-      Store.posts()
+      posts = Store.posts()
+
+      Map.new(list_of_args, fn %{limit: limit, offset: offset} = args ->
+        {args, posts |> Enum.drop(offset) |> Enum.take(limit)}
+      end)
     end
   end
 

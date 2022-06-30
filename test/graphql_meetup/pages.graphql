@@ -1,0 +1,8 @@
+{
+  firstPage: posts(limit: 2) {
+    title
+  }
+  thirdPage: posts(limit: 2, offset: 4) {
+    title
+  }
+}

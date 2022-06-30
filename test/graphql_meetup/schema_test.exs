@@ -66,4 +66,41 @@ defmodule GraphqlMeetup.SchemaTest do
              }
            } = result
   end
+
+  test "resolving separate arguments on the same field" do
+    query = "../pages.graphql" |> Path.expand(__ENV__.file) |> File.read!()
+
+    result = Absinthe.run!(query, Schema)
+
+    assert %{
+             data: %{
+               "firstPage" => [_, _],
+               "thirdPage" => [_, _]
+             }
+           } = result
+  end
+
+  test "resolves posts with author and comments" do
+    query =
+      "../posts_with_author_and_comments.graphql" |> Path.expand(__ENV__.file) |> File.read!()
+
+    result = Absinthe.run!(query, Schema)
+
+    assert %{
+             data: %{
+               "posts" => [
+                 %{
+                   "author" => %{"email" => _},
+                   "title" => _,
+                   "comments" => []
+                 },
+                 %{
+                   "author" => %{"email" => _},
+                   "comments" => [],
+                   "title" => _
+                 }
+               ]
+             }
+           } = result
+  end
 end
